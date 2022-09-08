@@ -7,19 +7,12 @@ public class Game {
         GameBoard gb = new GameBoard();
         System.out.println(gb);
 
-        boolean welcomeScreen = true;
         gb.setWelcomeScreen();
-        while(welcomeScreen){
+        long start = System.currentTimeMillis();
+        while(System.currentTimeMillis() - start <= 5000){
             System.out.print(gb);
             gb.updateWelcomeScreen();
-            System.out.println("Press Enter...");
             Thread.sleep(200);
-
-            if(input.hasNextLine()){
-                if(input.nextLine().equals("")){
-                    welcomeScreen = false;
-                }
-            }
         }
         gb.clear();
 
@@ -27,7 +20,7 @@ public class Game {
         gb.setTutorialScreen();
         while(tutorialScreen){
             System.out.print(gb);
-            System.out.println("Press Enter Again...");
+            System.out.println("Press Enter...");
             if(input.hasNextLine()){
                 if(input.nextLine().equals("")){
                     tutorialScreen = false;
