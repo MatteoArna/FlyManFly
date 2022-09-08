@@ -4,17 +4,9 @@ public class Game {
     public static void main(String[] args) throws InterruptedException {
         Scanner input = new Scanner(System.in);
 
-        GameBoard gb = new GameBoard();
-        System.out.println(gb);
-
-        gb.setWelcomeScreen();
-        long start = System.currentTimeMillis();
-        while(System.currentTimeMillis() - start <= 5000){
-            System.out.print(gb);
-            gb.updateWelcomeScreen();
-            Thread.sleep(200);
-        }
-        gb.clear();
+        GameBoard gb = new GameBoard("FLY MAN, FLY!", "Matteo & Nathan");
+        
+        gb.welcomeScreen(5000);
 
         boolean tutorialScreen = true;
         gb.setTutorialScreen();

@@ -1,15 +1,12 @@
 import static org.alb.util.AnsiEscapes.*;
-
-import Objects.Dove;
-import Objects.Player;
-import Objects.ScoreBoost;
-import Objects.Shield;
-import Objects.SlowMotion;
+import Objects.*;
+import Other.Directions;
+import apple.laf.JRSUIConstants.Direction;
 
 public class GameBoard {
 
-    private String creators = "by Matteo & Nathan";
-    private String title = "FLY MAN, FLY!";
+    private String title;
+    private String creators;
 
     public static final int ROWS = 5;
     public static final int COLUMNS = 25;
@@ -17,8 +14,10 @@ public class GameBoard {
     private Object[][] board;
     private Player player;
 
-    public GameBoard(){
+    public GameBoard(String title, String creators){
         this.player = new Player();
+        this.title = title;
+        this.creators = creators;
         
         this.board = new Object[ROWS][COLUMNS];
         
@@ -56,30 +55,55 @@ public class GameBoard {
 
     }
 
-    public void setWelcomeScreen(){
-        this.board[player.getRow()][player.getCol()] = player;
-
+    public void welcomeScreen(int time) throws InterruptedException{
+        long start = System.currentTimeMillis();
+        board[player.getRow()][player.getCol()] = player;
         for(int i = 0; i < creators.length(); i ++){
             board[4][i + 3] = creators.substring(i, i+1);
         }
-
         for(int i = 0; i < title.length(); i ++){
             board[1][i + 6] = title.substring(i, i+1);
         }
+        while(System.currentTimeMillis() - start < time){
+            System.out.print(this);
+            moveObject(player, Directions.RIGHT);
+            Thread.sleep(300);
+        }
+        clear();
+    }
+
+    private boolean moveObject(GameObject obj, Directions direction){
+        int oldRow = obj.getRow();
+        int oldCol = obj.getCol();
+        int newRow = oldRow;
+        int newCol = oldCol;
+        switch(direction){
+            case LEFT:
+                newCol = (newCol - 1) % board[0].length;
+                break;
+            case RIGHT:
+                newCol = (newCol + 1) % board[0].length;
+                break;
+            case TOP:
+                newRow = (newRow - 1) % board.length;
+                break;
+            case BOTTOM:
+                newRow = (newRow + 1) % board.length;
+                break;
+            default:
+                return false;
+        }
+        if(board[newRow][newCol] != null){
+            return false;
+        }
+        board[oldRow][oldCol] = null;
+        board[newRow][newCol] = obj;
+        obj.move(newRow, newCol);
+        return true;
     }
 
     public void clear(){
         board = new Object[ROWS][COLUMNS];
-    }
-
-    public void updateWelcomeScreen(){
-        int row = player.getRow();
-        int col = player.getCol();
-        this.board[row][col] = null;
-        col = (col + 1) % board[0].length;
-        this.board[row][col] = player;
-        player.setCol(col);
-
     }
 
     @Override

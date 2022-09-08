@@ -28,4 +28,9 @@ public abstract class GameObject {
     public String toString() {
         return icon + "";
     }
+
+    public void move(int row, int col){
+        this.row = row;
+        this.col = col;
+    }
 }
