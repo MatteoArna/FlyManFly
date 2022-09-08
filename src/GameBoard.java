@@ -1,4 +1,7 @@
 import static org.alb.util.AnsiEscapes.*;
+
+import java.util.Scanner;
+
 import Objects.*;
 import Other.Directions;
 import apple.laf.JRSUIConstants.Direction;
@@ -23,7 +26,8 @@ public class GameBoard {
         
     }
 
-    public void setTutorialScreen(){
+
+    public void tutorialScreen(Scanner input){
         String controls = "CONTROLS";
 
         String[] descriptions = {"OBSTACLE", "SLOW MOTION", "SCORE BOOST", "SHIELD"};
@@ -49,6 +53,17 @@ public class GameBoard {
                             board[j][i] = descriptions[j].substring(i - 14, i - 13);
                         }
                     }
+                }
+            }
+        }
+
+        boolean tutorialScreen = true;
+        while(tutorialScreen){
+            System.out.print(this);
+            System.out.println("Press Enter...");
+            if(input.hasNextLine()){
+                if(input.nextLine().equals("")){
+                    tutorialScreen = false;
                 }
             }
         }
