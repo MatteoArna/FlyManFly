@@ -1,3 +1,4 @@
+import java.io.IOException;
 import java.util.Scanner;
 
 public class Game {
@@ -11,8 +12,8 @@ public class Game {
 
         try {
             gb.play(input);
-        } catch (Exception e) {
-            // TODO Auto-generated catch block
+        } catch (IOException | InterruptedException e) {
+            System.out.println("Error during the moovement");
             e.printStackTrace();
         }
 

@@ -32,7 +32,9 @@ public class GameBoard {
         board[player.getRow()][player.getCol()] = player;
 
         boolean isAlive = true;
+        boolean refresh = true;
         char in = ' ';
+        System.out.print(this);
         while(isAlive){
             
             if(System.in.available() > 0){
@@ -52,11 +54,16 @@ public class GameBoard {
                     moveObject(player, Directions.RIGHT);
                     break;
                 case 'q':
-                    System.out.println(Integer.parseInt("ciao"));
+                    isAlive = false;
+                default:
+                    refresh = false;
+                    break;
             }
             in = ' ';
-            System.out.print(this);
-            Thread.sleep(300);
+            if(refresh){
+                System.out.print(this);
+            }
+            refresh = true;
         }
     }
 
