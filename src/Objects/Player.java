@@ -3,7 +3,10 @@ package Objects;
 public class Player extends GameObject{
     public Player(){
         setIcon("🕴️");
-        setCol(0);
-        setRow(3);
+        resetPosition();
+    }
+
+    public void resetPosition(){
+        move(3, 0);
     }
 }

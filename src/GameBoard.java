@@ -1,10 +1,10 @@
 import static org.alb.util.AnsiEscapes.*;
 
+import java.io.IOException;
 import java.util.Scanner;
 
 import Objects.*;
 import Other.Directions;
-import apple.laf.JRSUIConstants.Direction;
 
 public class GameBoard {
 
@@ -24,6 +24,40 @@ public class GameBoard {
         
         this.board = new Object[ROWS][COLUMNS];
         
+    }
+
+    public void play(Scanner input) throws IOException, InterruptedException{
+        clear();
+        player.resetPosition();
+        board[player.getRow()][player.getCol()] = player;
+
+        boolean isAlive = true;
+        char in = ' ';
+        while(isAlive){
+            
+            if(System.in.available() > 0){
+                in = (char)System.in.read();
+            }
+            switch(in){
+                case 'w':
+                    moveObject(player, Directions.TOP);
+                    break;
+                case 'a':
+                    moveObject(player, Directions.LEFT);
+                    break;
+                case 's':
+                    moveObject(player, Directions.BOTTOM);
+                    break;
+                case 'd':
+                    moveObject(player, Directions.RIGHT);
+                    break;
+                case 'q':
+                    System.out.println(Integer.parseInt("ciao"));
+            }
+            in = ' ';
+            System.out.print(this);
+            Thread.sleep(300);
+        }
     }
 
 
@@ -94,23 +128,31 @@ public class GameBoard {
         int newCol = oldCol;
         switch(direction){
             case LEFT:
-                newCol = (newCol - 1) % board[0].length;
+                newCol = (newCol - 1);
                 break;
             case RIGHT:
-                newCol = (newCol + 1) % board[0].length;
+                newCol = (newCol + 1);
                 break;
             case TOP:
-                newRow = (newRow - 1) % board.length;
+                newRow = (newRow - 1);
                 break;
             case BOTTOM:
-                newRow = (newRow + 1) % board.length;
+                newRow = (newRow + 1);
                 break;
             default:
                 return false;
         }
+
+        if(newCol < 0 || newCol >= board[0].length - 1){
+            return false;
+        }
+        if(newRow < 0 || newRow >= board.length - 1){
+            return false;
+        }
         if(board[newRow][newCol] != null){
             return false;
         }
+
         board[oldRow][oldCol] = null;
         board[newRow][newCol] = obj;
         obj.move(newRow, newCol);
