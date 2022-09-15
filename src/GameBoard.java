@@ -10,10 +10,13 @@ public class GameBoard {
 
     private String title;
     private String creators;
+    
+    private int score = 0;
 
     public static final int ROWS = 5;
     public static final int COLUMNS = 25;
-
+    
+    private int refresRate = 1000;
     private Object[][] board;
     private Player player;
 
@@ -34,6 +37,10 @@ public class GameBoard {
         boolean isAlive = true;
         boolean refresh = true;
         char in = ' ';
+
+        long start = System.currentTimeMillis();
+        long now = 0l;
+
         System.out.print(this);
         while(isAlive){
             
@@ -59,11 +66,18 @@ public class GameBoard {
                     refresh = false;
                     break;
             }
+
+            if(now - start > refresRate){
+                score++;
+                start = now;
+                refresh = true;
+            }
             in = ' ';
             if(refresh){
                 System.out.print(this);
             }
             refresh = true;
+            now = System.currentTimeMillis();
         }
     }
 
@@ -135,16 +149,16 @@ public class GameBoard {
         int newCol = oldCol;
         switch(direction){
             case LEFT:
-                newCol = (newCol - 1);
+                newCol--;
                 break;
             case RIGHT:
-                newCol = (newCol + 1);
+                newCol++;
                 break;
             case TOP:
-                newRow = (newRow - 1);
+                newRow--;
                 break;
             case BOTTOM:
-                newRow = (newRow + 1);
+                newRow++;
                 break;
             default:
                 return false;
@@ -174,8 +188,8 @@ public class GameBoard {
     public String toString() {
         clearScreen();
         reset();
-        String ris = "";
         System.out.print("\r");
+        String ris = "";
 		for(int i = 0; i < board.length; i++){
 			for(int j = 0; j < board[0].length; j++){
 				if(i == 4){
@@ -188,6 +202,7 @@ public class GameBoard {
 			}
 			System.out.print("\n" + "\r");
 		}
+        ris += "Score: " + score;
         return ris;
     }
 }
