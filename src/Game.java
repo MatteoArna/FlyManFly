@@ -16,6 +16,7 @@ public class Game {
             System.out.println("Error during the moovement");
             e.printStackTrace();
         }
+        System.out.println("Hai perso");
 
         input.close();
     }

@@ -1,6 +1,8 @@
 import static org.alb.util.AnsiEscapes.*;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 import Objects.*;
@@ -16,7 +18,8 @@ public class GameBoard {
     public static final int ROWS = 5;
     public static final int COLUMNS = 25;
     
-    private int refresRate = 1000;
+    private List<GameObject> objects;
+    private int refresRate = 100;
     private Object[][] board;
     private Player player;
 
@@ -24,9 +27,41 @@ public class GameBoard {
         this.player = new Player();
         this.title = title;
         this.creators = creators;
-        
+        this.objects = new ArrayList<>();
         this.board = new Object[ROWS][COLUMNS];
         
+    }
+
+    private GameObject generateDove(){
+        Dove d = new Dove(true, board[0].length - 1, board.length - 1);
+        board[d.getRow()][d.getCol()] = d;
+        return d;
+    }
+
+    private boolean isOnTheSameSpot(GameObject obj1, GameObject obj2){
+        if(obj1.getCol() == obj2.getCol() && obj1.getRow() == obj2.getRow()){
+            return true;
+        }
+        return false;
+    }
+
+    private GameObject mooveObjects(List<GameObject> objects){
+        List<GameObject> toRemove = new ArrayList<>();
+        for (GameObject gameObject : objects) {
+            if(gameObject.getCol() == 0){
+                toRemove.add(gameObject);
+            }else{
+                moveObject(gameObject, Directions.LEFT);
+                if(isOnTheSameSpot(gameObject, player)){
+                    return gameObject;
+                }
+            }
+        }
+        for (GameObject gameObject : toRemove) {
+            board[gameObject.getRow()][gameObject.getCol()] = null;
+            objects.remove(gameObject);
+        }
+        return null;
     }
 
     public void play(Scanner input) throws IOException, InterruptedException{
@@ -34,12 +69,16 @@ public class GameBoard {
         player.resetPosition();
         board[player.getRow()][player.getCol()] = player;
 
+        objects.add(generateDove());
+
         boolean isAlive = true;
         boolean refresh = true;
         char in = ' ';
 
         long start = System.currentTimeMillis();
         long now = 0l;
+
+        GameObject contact = null;
 
         System.out.print(this);
         while(isAlive){
@@ -60,8 +99,6 @@ public class GameBoard {
                 case 'd':
                     moveObject(player, Directions.RIGHT);
                     break;
-                case 'q':
-                    isAlive = false;
                 default:
                     refresh = false;
                     break;
@@ -70,6 +107,10 @@ public class GameBoard {
             if(now - start > refresRate){
                 score++;
                 start = now;
+                contact = mooveObjects(objects);
+                if(contact instanceof Dove){
+                    isAlive = false;
+                }
                 refresh = true;
             }
             in = ' ';
@@ -168,9 +209,6 @@ public class GameBoard {
             return false;
         }
         if(newRow < 0 || newRow >= board.length - 1){
-            return false;
-        }
-        if(board[newRow][newCol] != null){
             return false;
         }
 
