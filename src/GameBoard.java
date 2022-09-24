@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Scanner;
 
 import Objects.*;
+import Objects.Enemies.*;
 import Other.Directions;
 
 public class GameBoard {
@@ -60,6 +61,11 @@ public class GameBoard {
         for (GameObject gameObject : toRemove) {
             board[gameObject.getRow()][gameObject.getCol()] = null;
             objects.remove(gameObject);
+            if(gameObject instanceof Enemy){
+                ((Enemy)gameObject).respawn();
+                board[gameObject.getRow()][gameObject.getCol()] = gameObject;
+                objects.add(gameObject);
+            }
         }
         return null;
     }
