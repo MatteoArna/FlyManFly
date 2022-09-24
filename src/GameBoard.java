@@ -125,7 +125,24 @@ public class GameBoard {
             }
             refresh = true;
             now = System.currentTimeMillis();
+
+            if(score % 90 == 0){
+                objects.add(generateDove());
+                checkLastRow();
+                score++;
+            }
         }
+    }
+
+    private void checkLastRow(){
+        for(int i = 0; i < ROWS - 1; i++){
+            if(board[i][COLUMNS - 1] == null){
+                return;
+            }
+        }
+        GameObject toRemove = (GameObject)board[(int) Math.random() * ROWS][COLUMNS - 1];
+        board[toRemove.getRow()][COLUMNS - 1] = null;
+        objects.remove(toRemove);
     }
 
 
