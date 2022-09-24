@@ -193,7 +193,7 @@ public class GameBoard {
         long start = System.currentTimeMillis();
         board[player.getRow()][player.getCol()] = player;
         for(int i = 0; i < creators.length(); i ++){
-            board[4][i + 3] = creators.substring(i, i+1);
+            board[4][i + 4] = creators.substring(i, i+1);
         }
         for(int i = 0; i < title.length(); i ++){
             board[1][i + 6] = title.substring(i, i+1);
